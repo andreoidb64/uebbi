@@ -116,6 +116,7 @@ class Reboot_MainView(pyapp.Window):
 	def ftp_off(self, user = True):
 		from widgets.dialog import MessageDialog
 		os.system('/usr/bin/killall tcpsvd')
+		os.system('/usr/bin/killall telnetd')
 		dialog = MessageDialog('confirm', _('Opzioni sviluppatore disattivate.'))
 
 	def cb_btn_back(self, menu):
