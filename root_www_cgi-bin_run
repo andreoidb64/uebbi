@@ -1,0 +1,75 @@
+#!/usr/bin/awk -f/root/www/cgi-bin/run
+################################################################################
+# Auth: andreoidb64
+# Date: 20160330
+# 
+# Description:
+# Xample of AWK CGI for Webby 
+################################################################################
+
+function ParseCgiQuery() {
+	if (("echo $QUERY_STRING" | getline CGIQRY) <= 0) {
+		CGIQRY=""
+	}
+	return CGIQRY
+}
+
+function GetSetFromFile(set_id,mysep,myfile) {
+	while ((getline dummy < myfile) > 0) {
+		split (dummy,a,mysep)
+		if (a[1] == set_id) break
+	}
+	close(myfile)
+	return a[2]
+}
+	
+BEGIN {
+	print "\n<html>"
+	
+	ParseCgiQuery()
+	
+	if (CGIQRY == "") {
+		print "Available queries:<br>"
+		print ".................. ?date_now=<br>"
+		print ".................. ?os_env_list=<br>"
+		print ".................. ?get_temperature=<br>"
+		print ".................. ?low_backlight_set=<br>"
+	}
+	
+	if (CGIQRY == "date_now=") {
+		if (("date" | getline date_now) <= 0) {
+			date_now="Unknown"
+		}
+		print "<br>Date:: " date_now
+	}
+
+	if (CGIQRY == "low_backlight_set=") {
+		if (("/bin/backlight_test 1" | getline low_backlight_set) <= 0) {
+			low_backlight_set="ERR"
+		}
+		print "<br>LowBacklight:: " low_backlight_set
+	}
+
+	if (CGIQRY == "os_env_list=") {
+		while (("set" | getline dummy) > 0) {
+			os_env_list=os_env_list "<br>" dummy
+		}
+		print os_env_list
+	}
+	
+	if (CGIQRY == "get_temperature=") {
+		dummy=GetSetFromFile("sensor.temperature"," = ","/root/setup_data/setup.db")
+		sub("(0, ","",dummy)
+		sub(")","",dummy)
+		dummy=dummy-3
+		print "<br>Temp:: " dummy
+	}
+	
+	exit
+}
+
+END {
+	print "</html>"
+}
+
+{ print $0 }
