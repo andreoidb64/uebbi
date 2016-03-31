@@ -59,8 +59,8 @@ BEGIN {
 	
 	if (CGIQRY == "get_temperature=") {
 		dummy=GetSetFromFile("sensor.temperature"," = ","/root/setup_data/setup.db")
-		sub("(0, ","",dummy)
-		sub(")","",dummy)
+		sub("\(0, ","",dummy)
+		sub("\)","",dummy)
 		dummy=dummy-3
 		print "<br>Temp:: " dummy
 	}
