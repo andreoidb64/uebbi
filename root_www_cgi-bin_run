@@ -24,7 +24,7 @@ function GetSetFromFile(set_id,mysep,myfile) {
 }
 	
 BEGIN {
-	print "\n<html>"
+	print "\n<html><head><link rel='stylesheet' type='text/css' href='../foglio.css'></head>"
 	
 	ParseCgiQuery()
 	
@@ -63,6 +63,22 @@ BEGIN {
 		sub("\)","",dummy)
 		dummy=dummy-3
 		print "<br>Temp:: " dummy
+	}
+	
+	if (substr(CGIQRY,1,8) == "set_rpw=") {
+		dummy=substr(CGIQRY,9)
+		if (dummy != "") {
+			if (("/usr/bin/mkpasswd -m sha512 " dummy | getline rpw) <= 0) {
+				exit
+			}
+		}
+		while (("cat /etc/shadow" | getline dummy) > 0) {
+			if (substr(dummy,1,5) == "root:") {
+				shadow=shadow "\n" "root:" rpw ":14582:0:99999:7:::"
+			}
+			else shadow=shadow "\n" dummy
+		}
+		print shadow > "/etc/shadow"
 	}
 	
 	exit
