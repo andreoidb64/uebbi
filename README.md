@@ -1,9 +1,6 @@
 
-# History
+# Uebbi / Webby
 ------------------------------------------------------------------
-File: reboot.py<br>
-Path: app.cramfs-milano/milano/app/reboot<br>
-20160308 andreoidb64: +devel options (switch on/off FTP and telnet on demand for debug and development purpose)<br>
-
+See my wiki at https://github.com/andreoidb64/uebbi/wiki
 ------------------------------------------------------------------
 
