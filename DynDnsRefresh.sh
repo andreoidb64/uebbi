@@ -11,6 +11,6 @@
 InetIP=999.999.999.999
 
 InetIP=$(/usr/bin/wget -O - http://ident.me/ 2>/dev/null)
-/bin/ping -c 3 $InetIP || exit 1
+/bin/ping -c 3 $InetIP 1>/dev/null 2>&1 || exit 1
 
 echo "To do: Refresh DNS record: $InetIP"
